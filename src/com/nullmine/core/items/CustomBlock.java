@@ -9,17 +9,19 @@ public class CustomBlock extends CustomItem {
     private int toolLevel;
     private String tool;
     private boolean isFortunable;
-    private boolean isVanilla = false;
 
     public void spawnParticles(int btps, Location loc) {};
     public ItemStack getDrop(short damage) {return getItem();}
 
     @Override
     public ItemStack getFinalItemStack() {
-        if (!isVanilla()) {
+        if (!getId().startsWith("minecraft")) {
             ItemMeta meta = getItem().getItemMeta();
             meta.setLore(LoreInfo.getLore(getId(), new String[]{"block"}));
             getItem().setItemMeta(meta);
+            if (getDisplayname() != null) {
+                meta.setDisplayName(getDisplayname().replace("&", "§"));
+            }
         }
         return getItem();
     }
@@ -54,13 +56,5 @@ public class CustomBlock extends CustomItem {
 
     public void setFortunable(boolean fortunable) {
         isFortunable = fortunable;
-    }
-
-    public boolean isVanilla() {
-        return isVanilla;
-    }
-
-    public void setVanilla(boolean vanilla) {
-        isVanilla = vanilla;
     }
 }

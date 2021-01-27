@@ -12,7 +12,6 @@ public class MinecraftStone extends CustomBlock {
         setToolLevel(1);
         setTool("pickaxe");
         setHardness(160);
-        setVanilla(true);
     }
 
     @Override

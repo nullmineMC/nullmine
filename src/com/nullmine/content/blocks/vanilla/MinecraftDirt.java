@@ -12,6 +12,5 @@ public class MinecraftDirt extends CustomBlock {
         setToolLevel(0);
         setTool("shovel");
         setHardness(40);
-        setVanilla(true);
     }
 }

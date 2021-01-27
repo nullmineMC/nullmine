@@ -12,6 +12,5 @@ public class MinecraftCobbleStone extends CustomBlock {
         setToolLevel(1);
         setTool("pickaxe");
         setHardness(140);
-        setVanilla(true);
     }
 }

@@ -12,7 +12,6 @@ public class MinecraftBedrock extends CustomBlock {
         setToolLevel(2);
         setTool("pickaxe");
         setHardness(-1);
-        setVanilla(true);
     }
 
 }
