@@ -1,0 +1,10 @@
+name: NullMine
+main: com.nullmine.core.NullMine
+version: 1.0
+
+commands:
+  customgive:
+    aliases: [cg, cgive]
+    usage: /<command> <item>
+    description: admin command for giving items
+    permission: nullmine.admin
