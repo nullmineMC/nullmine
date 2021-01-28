@@ -5,6 +5,7 @@ import com.nullmine.content.Items;
 import com.nullmine.core.items.BlockManager;
 import com.nullmine.core.items.CommandCustomGive;
 import com.nullmine.core.items.ItemManager;
+import com.nullmine.core.items.crafts.CraftingManager;
 import com.nullmine.core.utils.DreamingPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -34,6 +35,7 @@ public class NullMine extends JavaPlugin implements Listener {
 
         new ItemManager();
         new BlockManager();
+        new CraftingManager();
 
         Items.initialize();
         Blocks.initialize();

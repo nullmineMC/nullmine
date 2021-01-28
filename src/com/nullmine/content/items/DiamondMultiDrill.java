@@ -1,6 +1,8 @@
 package com.nullmine.content.items;
 
 import com.nullmine.core.items.CustomItem;
+import com.nullmine.core.items.crafts.CraftingManager;
+import com.nullmine.core.items.crafts.CustomRecipe;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -15,5 +17,14 @@ public class DiamondMultiDrill extends CustomItem {
                 "4",
                 "8"
         });
+
+        CustomRecipe recipe = new CustomRecipe(getFinalItemStack());
+        recipe.shape(new String[]{" p ", "sga", " g "});
+        recipe.setCustomIngredient('p', "diamond_pickaxe");
+        recipe.setCustomIngredient('s', "diamond_shovel");
+        recipe.setCustomIngredient('a', "diamond_axe");
+        recipe.setVanillaIngredient('g', Material.GOLD_INGOT);
+
+        CraftingManager.getInstance().registerRecipe(recipe);
     }
 }

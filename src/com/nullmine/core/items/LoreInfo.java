@@ -62,7 +62,7 @@ public class LoreInfo {
     }
 
     public static String getId(ItemStack item) {
-        if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
+        if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
             return item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).split("b", 2)[1];
         } else {
             return null;

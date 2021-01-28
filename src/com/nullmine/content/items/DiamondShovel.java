@@ -6,18 +6,18 @@ import com.nullmine.core.items.crafts.CustomRecipe;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public class DiamondPickaxe extends CustomItem {
-    public DiamondPickaxe () {
-        setId("diamond_pickaxe");
-        setItem(new ItemStack(Material.DIAMOND_PICKAXE));
+public class DiamondShovel extends CustomItem {
+    public DiamondShovel() {
+        setId("diamond_shovel");
+        setItem(new ItemStack(Material.DIAMOND_SPADE));
         setType(new String[] {
-                "pickaxe",
+                "shovel",
                 "12",
                 "4",
                 "6"
         });
         CustomRecipe recipe = new CustomRecipe(getFinalItemStack());
-        recipe.shape(new String[]{"ddd", " s ", " s "});
+        recipe.shape(new String[]{" d ", " s ", " s "});
         recipe.setVanillaIngredient('d', Material.DIAMOND);
         recipe.setVanillaIngredient('s', Material.GOLD_INGOT);
 
