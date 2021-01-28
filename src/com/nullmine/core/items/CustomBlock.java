@@ -18,10 +18,10 @@ public class CustomBlock extends CustomItem {
         if (!getId().startsWith("minecraft")) {
             ItemMeta meta = getItem().getItemMeta();
             meta.setLore(LoreInfo.getLore(getId(), new String[]{"block"}));
-            getItem().setItemMeta(meta);
-            if (getDisplayname() != null) {
-                meta.setDisplayName(getDisplayname().replace("&", "§"));
+            if (getDisplayName() != null) {
+                meta.setDisplayName(getDisplayName().replace("&", "§"));
             }
+            getItem().setItemMeta(meta);
         }
         return getItem();
     }

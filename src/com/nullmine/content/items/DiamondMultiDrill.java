@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class DiamondMultiDrill extends CustomItem {
     public DiamondMultiDrill() {
-        setDisplayname("§fDiamond multi tool");
+        setDisplayName("§fDiamond multi tool");
         setId("diamond_multi_tool");
         setItem(new ItemStack(Material.PRISMARINE_SHARD));
         setType(new String[] {

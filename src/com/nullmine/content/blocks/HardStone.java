@@ -14,7 +14,7 @@ public class HardStone extends CustomBlock {
         setToolLevel(2);
         setTool("pickaxe");
         setHardness(1800);
-        setDisplayname("§fHard stone");
+        setDisplayName("§fHard stone");
     }
 
     @Override

@@ -12,14 +12,14 @@ public class CustomItem {
      */
     private String[] type;
 
-    private String displayname;
+    private String displayName;
 
     public ItemStack getFinalItemStack() {
         ItemMeta meta = item.getItemMeta();
         meta.setLore(LoreInfo.getLore(id, type));
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        if (displayname != null) {
-            meta.setDisplayName(displayname.replace("&", "§"));
+        if (displayName != null) {
+            meta.setDisplayName(displayName.replace("&", "§"));
         }
         item.setItemMeta(meta);
         return item;
@@ -49,11 +49,11 @@ public class CustomItem {
         this.type = type;
     }
 
-    public String getDisplayname() {
-        return displayname;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setDisplayname(String displayname) {
-        this.displayname = displayname;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }
