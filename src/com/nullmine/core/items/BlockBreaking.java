@@ -99,7 +99,7 @@ public class BlockBreaking implements Listener {
                     player.ticksGoneBy = 0;
                     player.ticksNeeded = block.getHardness();
                     if (block.getTool().equals(LoreInfo.getType(pl.getItemInHand())) || "multi tool".equals(LoreInfo.getType(pl.getItemInHand()))) {
-                        player.ticksNeeded /= LoreInfo.getMiningSpeed(pl.getItemInHand());
+                        player.ticksNeeded /= LoreInfo.getMiningSpeed(pl.getItemInHand()) + pl.getItemInHand().getEnchantmentLevel(Enchantment.DIG_SPEED);
                         if (block.getToolLevel() > LoreInfo.getMiningLevel(pl.getItemInHand())) {
                             player.ticksNeeded *= 5;
                             player.willDrop = false;
