@@ -8,7 +8,7 @@ public class MinecraftBedrock extends CustomBlock {
 
     public MinecraftBedrock() {
         setId("minecraft:bedrock");
-        setItem(new ItemStack(Material.BEDROCK));
+        setItem(new ItemStack(Material.AIR));
         setToolLevel(2);
         setTool("pickaxe");
         setHardness(-1);
