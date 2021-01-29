@@ -17,13 +17,10 @@ public class CraftingManager implements Listener {
 
     private Map<String, ItemStack> recipes;
 
-    private Map<String, String> itemsRequiringResearch;
-
     public CraftingManager() {
         instance = this;
 
         recipes = new HashMap<>();
-        itemsRequiringResearch = new HashMap<>();
 
         Bukkit.getPluginManager().registerEvents(this, NullMine.getInstance());
     }
@@ -33,9 +30,8 @@ public class CraftingManager implements Listener {
         recipe.register();
         recipes.put(recipe.getKeyString(), recipe.getResult());
 
-        if (recipe.requiredResearch != null) {
-            itemsRequiringResearch.put(LoreInfo.getId(recipe.getResult()), recipe.requiredResearch);
-        }
+        RecipeBook.getInstance().addRecipe(recipe.category, recipe.getResult(), recipe.getItems());
+
     }
 
     @EventHandler

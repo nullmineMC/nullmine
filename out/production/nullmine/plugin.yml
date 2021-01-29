@@ -8,3 +8,8 @@ commands:
     usage: /<command> <item>
     description: admin command for giving items
     permission: nullmine.admin
+  recipebook:
+    aliases: [rb, recipes, wayofcrafting, howdoimakestuff]
+    usage: /<command>
+    description: recipes!
+    permission: nullMine.player

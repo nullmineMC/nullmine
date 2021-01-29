@@ -19,7 +19,7 @@ public class CustomRecipe {
     private Map<Character, Material> vanillaItems;
     private Map<Character, String> customItems;
 
-    protected String requiredResearch = null;
+    public String category;
 
     public CustomRecipe(ItemStack item) {
         vanillaItems = new HashMap<>();
@@ -76,17 +76,6 @@ public class CustomRecipe {
         return shape;
     }
 
-    protected Map<Character, ItemStack> getIngredients() {
-        Map<Character, ItemStack> ingredients = new HashMap<>();
-
-            for (Map.Entry<Character, Material> e : vanillaItems.entrySet()) {
-                ItemStack ingredient = customItems.containsKey(e.getKey()) ? ItemManager.getInstance().get(customItems.get(e.getKey())) : new ItemStack(e.getValue());
-                ingredients.put(e.getKey(), ingredient);
-            }
-
-        return ingredients;
-    }
-
     protected String getIngredient(char c) {
         String ingredient;
         if (customItems.containsKey(c)) {
@@ -100,12 +89,30 @@ public class CustomRecipe {
         return ingredient;
     }
 
+    protected ItemStack getIngredientItem(char c) {
+        ItemStack ingredient;
+        if (customItems.containsKey(c)) {
+            ingredient = ItemManager.getInstance().get(customItems.get(c));
+        } else if (vanillaItems.containsKey(c)) {
+            ingredient = new ItemStack(vanillaItems.get(c));
+        } else {
+            ingredient = new ItemStack(Material.AIR);
+        }
+
+        return ingredient;
+    }
+
 
     protected void register() {
         Bukkit.addRecipe(shapedRecipe);
     }
 
-    public void setResearch(String r) {
-        requiredResearch = r;
+    public ItemStack[] getItems() {
+        return new ItemStack[] {
+            getIngredientItem(shape[0].charAt(0)), getIngredientItem(shape[0].charAt(1)), getIngredientItem(shape[0].charAt(2)),
+            getIngredientItem(shape[1].charAt(0)), getIngredientItem(shape[1].charAt(1)), getIngredientItem(shape[1].charAt(2)),
+            getIngredientItem(shape[2].charAt(0)), getIngredientItem(shape[2].charAt(1)), getIngredientItem(shape[2].charAt(2))
+        };
+
     }
 }

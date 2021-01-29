@@ -20,6 +20,7 @@ public class DiamondPickaxe extends CustomItem {
         recipe.shape(new String[]{"ddd", " s ", " s "});
         recipe.setVanillaIngredient('d', Material.DIAMOND);
         recipe.setVanillaIngredient('s', Material.GOLD_INGOT);
+        recipe.category = "Vanilla diamond tools";
 
         CraftingManager.getInstance().registerRecipe(recipe);
     }

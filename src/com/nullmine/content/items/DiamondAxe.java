@@ -20,6 +20,7 @@ public class DiamondAxe extends CustomItem {
         recipe.shape(new String[]{" dd", " sd", " s "});
         recipe.setVanillaIngredient('d', Material.DIAMOND);
         recipe.setVanillaIngredient('s', Material.GOLD_INGOT);
+        recipe.category = "Vanilla diamond tools";
 
         CraftingManager.getInstance().registerRecipe(recipe);
     }

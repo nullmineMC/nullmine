@@ -24,6 +24,7 @@ public class DiamondMultiDrill extends CustomItem {
         recipe.setCustomIngredient('s', "diamond_shovel");
         recipe.setCustomIngredient('a', "diamond_axe");
         recipe.setVanillaIngredient('g', Material.GOLD_INGOT);
+        recipe.category = "Vanilla diamond tools";
 
         CraftingManager.getInstance().registerRecipe(recipe);
     }

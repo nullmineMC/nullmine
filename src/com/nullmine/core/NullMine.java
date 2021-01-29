@@ -1,11 +1,14 @@
 package com.nullmine.core;
 
 import com.nullmine.content.Blocks;
+import com.nullmine.content.CraftSections;
 import com.nullmine.content.Items;
 import com.nullmine.core.items.BlockManager;
 import com.nullmine.core.items.CommandCustomGive;
 import com.nullmine.core.items.ItemManager;
 import com.nullmine.core.items.crafts.CraftingManager;
+import com.nullmine.core.items.crafts.RecipeBook;
+import com.nullmine.core.items.crafts.RecipeBookCommand;
 import com.nullmine.core.utils.DreamingPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -36,14 +39,18 @@ public class NullMine extends JavaPlugin implements Listener {
         new ItemManager();
         new BlockManager();
         new CraftingManager();
+        new RecipeBook();
 
+        CraftSections.initialize();
         Items.initialize();
         Blocks.initialize();
 
         new CommandCustomGive();
+        new RecipeBookCommand();
 
         Bukkit.getPluginManager().registerEvents(this, this);
 
+        RecipeBook.getInstance().finishRecipeBook();
         System.gc();
     }
 
