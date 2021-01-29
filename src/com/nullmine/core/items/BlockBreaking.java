@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -51,6 +52,9 @@ public class BlockBreaking implements Listener {
                         PacketWizard.sendParticle(EnumParticle.BLOCK_DUST, x.breakingBlockLocation.add(0.5, 0.5, 0.5), 50, 0.3f, 0.1f, block.getItem().getTypeId());
 
                         if (x.willDrop) {
+                            if (block.isFortunable()) {
+                                drop.setAmount(drop.getAmount() * (x.player.getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS) + 1));
+                            }
                             x.breakingBlockLocation.getWorld().dropItem(x.breakingBlockLocation, drop);
                         }
                     }
