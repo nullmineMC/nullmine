@@ -90,7 +90,7 @@ public class ChestUI implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if (!title.replace("§", "").equals(e.getClickedInventory().getItem(0).getItemMeta().getLore().get(0).replace("§", ""))) {
+        if (!e.getClickedInventory().getItem(0).hasItemMeta() || !e.getClickedInventory().getItem(0).getItemMeta().hasLore() || !title.replace("§", "").equals(e.getClickedInventory().getItem(0).getItemMeta().getLore().get(0).replace("§", ""))) {
             return;
         }
 
