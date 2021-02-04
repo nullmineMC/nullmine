@@ -8,11 +8,17 @@ import net.minecraft.server.v1_8_R3.PacketPlayInUpdateSign;
 import net.minecraft.server.v1_8_R3.PacketPlayOutOpenSignEditor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class GuildMenu extends ChestUI {
     public static GuildMenu getInstance() {
@@ -22,8 +28,9 @@ public class GuildMenu extends ChestUI {
     private static GuildMenu instance;
 
     private ItemStack[] noGuild;
+    private ItemStack[] yesGuild;
 
-    private String checkingString = "qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM_+$#@%&1234567890";
+    private String checkingString = "qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM_+$#@%&1234567890?!π";
 
     public GuildMenu() {
         super("Recipe book", 5);
@@ -60,6 +67,18 @@ public class GuildMenu extends ChestUI {
         metaa.setDisplayName("§bTo start you need to join or create a guild!");
         d.setItemMeta(metaa);
 
+        ItemStack w = new ItemStack(Material.GRASS);
+
+        metaa = w.getItemMeta();
+        metaa.setDisplayName("§bGuild's worlds");
+        w.setItemMeta(metaa);
+
+        ItemStack g = new ItemStack(Material.NETHER_STAR);
+
+        metaa = w.getItemMeta();
+        metaa.setDisplayName("§bGuild's info");
+        g.setItemMeta(metaa);
+
 
         noGuild = new ItemStack[] {
                 f,v,v,v,v,v,v,v,f,
@@ -68,6 +87,14 @@ public class GuildMenu extends ChestUI {
                 v,a,a,a,a,a,a,a,v,
                 f,v,v,v,v,v,v,v,f
         };
+        yesGuild = new ItemStack[] {
+                f,v,v,v,v,v,v,v,f,
+                v,a,a,a,g,a,a,a,v,
+                v,a,w,a,a,a,a,a,v,
+                v,a,a,a,a,a,a,a,v,
+                f,v,v,v,v,v,v,v,f
+        };
+
         getInventory().setContents(noGuild);
 
         finalizeUI(new ItemStack(Material.STAINED_GLASS_PANE));
@@ -79,12 +106,31 @@ public class GuildMenu extends ChestUI {
         if (g == null) {
             i.setContents(getInventory().getContents());
             player.openInventory(i);
+        } else {
+            i.setContents(yesGuild);
+            ItemStack guildinf = i.getItem(13);
+
+            ItemMeta metaa = guildinf.getItemMeta();
+            List<String> lore = new ArrayList<>();
+
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(new File("./data/guilds/" + g + "/guild.yml"));
+
+            lore.add("§3Guild's name: §b" + g);
+            lore.add("§3Guild's owner: §b" + Bukkit.getPlayer(UUID.fromString(config.getString("owner"))).getDisplayName());
+
+            metaa.setLore(lore);
+            guildinf.setItemMeta(metaa);
+
+            i.setItem(13, guildinf);
+            i.setItem(0, getInventory().getItem(0));
+
+            player.openInventory(i);
         }
     }
 
     @Override
     public void slotClicked(ItemStack item, int slot, Player player, Inventory inv) {
-        if (item.getItemMeta().getDisplayName().equals("§bCreate a guild")) {
+        if (item.hasItemMeta() && item.getItemMeta().getDisplayName().equals("§bCreate a guild")) {
             EntityPlayer nmspl = ((CraftPlayer)player).getHandle();
 
             PacketPlayOutOpenSignEditor open = new PacketPlayOutOpenSignEditor(new BlockPosition(0, 48, 0));

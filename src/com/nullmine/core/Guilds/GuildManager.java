@@ -37,7 +37,7 @@ public class GuildManager {
 
         YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 
-        config.set("owner", owner.getUniqueId());
+        config.set("owner", owner.getUniqueId().toString());
         config.set("creation_date", Calendar.getInstance().getTime());
 
         try {
