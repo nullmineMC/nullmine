@@ -1,10 +1,12 @@
 package com.nullmine.core.utils;
 
+import com.nullmine.core.Guilds.GuildMenu;
 import com.nullmine.core.Guilds.GuildNPC;
 import com.nullmine.core.NullMine;
 import com.nullmine.core.items.BlockBreaking;
 import io.netty.channel.*;
 import net.minecraft.server.v1_8_R3.PacketPlayInBlockDig;
+import net.minecraft.server.v1_8_R3.PacketPlayInUpdateSign;
 import net.minecraft.server.v1_8_R3.PacketPlayInUseEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -29,6 +31,8 @@ public class PacketHandler implements Listener {
                     BlockBreaking.getInstance().breakPacket((PacketPlayInBlockDig) packet, player);
                 } else if (packet instanceof PacketPlayInUseEntity) {
                     GuildNPC.getInstance().usePacket((PacketPlayInUseEntity) packet, player);
+                } else if (packet instanceof PacketPlayInUpdateSign) {
+                    GuildMenu.getInstance().getSignEditPacket((PacketPlayInUpdateSign) packet, player);
                 }
                 super.channelRead(channelHandlerContext, packet);
             }

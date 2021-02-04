@@ -1,7 +1,7 @@
 package com.nullmine.core.items;
 
 import com.nullmine.core.NullMine;
-import com.nullmine.core.utils.DreamingPlayer;
+import com.nullmine.core.utils.CustomPlayer;
 import com.nullmine.core.utils.PacketWizard;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.EnumParticle;
@@ -30,16 +30,16 @@ public class BlockBreaking implements Listener {
         return instance;
     }
 
-    private List<DreamingPlayer> currentlyBreakingBlocks;
+    private List<CustomPlayer> currentlyBreakingBlocks;
     public BlockBreaking () {
         instance = this;
         currentlyBreakingBlocks = new ArrayList<>();
         Bukkit.getPluginManager().registerEvents(this, NullMine.getInstance());
 
         Bukkit.getScheduler().runTaskTimer(NullMine.getInstance(), () -> {
-            List<DreamingPlayer> toRemove = new ArrayList<>();
+            List<CustomPlayer> toRemove = new ArrayList<>();
             try {
-                for (DreamingPlayer x : currentlyBreakingBlocks) {
+                for (CustomPlayer x : currentlyBreakingBlocks) {
                     x.ticksGoneBy += 1;
                     PacketWizard.playBlockBreakAnimation(x.player, x.ticksGoneBy * 9 / x.ticksNeeded, new BlockPosition(x.breakingBlockLocation.getX(), x.breakingBlockLocation.getY(), x.breakingBlockLocation.getZ()));
                     if (x.ticksGoneBy >= x.ticksNeeded) {
@@ -71,13 +71,13 @@ public class BlockBreaking implements Listener {
         PacketPlayInBlockDig pa = packet;
         PacketPlayInBlockDig.EnumPlayerDigType digType = pa.c();
         if (digType.equals(PacketPlayInBlockDig.EnumPlayerDigType.ABORT_DESTROY_BLOCK)) {
-            DreamingPlayer p = NullMine.getInstance().getPlayer(pl.getUniqueId());
+            CustomPlayer p = NullMine.getInstance().getPlayer(pl.getUniqueId());
             currentlyBreakingBlocks.remove(p);
             if (p.breakingBlockLocation != null) {
                 PacketWizard.playBlockBreakAnimation(p.player, 10, new BlockPosition(p.breakingBlockLocation.getX(), p.breakingBlockLocation.getY(), p.breakingBlockLocation.getZ()));
             }
         } else if (digType.equals(PacketPlayInBlockDig.EnumPlayerDigType.STOP_DESTROY_BLOCK)) {
-            DreamingPlayer p = NullMine.getInstance().getPlayer(pl.getUniqueId());
+            CustomPlayer p = NullMine.getInstance().getPlayer(pl.getUniqueId());
             currentlyBreakingBlocks.remove(p);
             if (p.breakingBlockLocation != null) {
                 PacketWizard.playBlockBreakAnimation(p.player, 10, new BlockPosition(p.breakingBlockLocation.getX(), p.breakingBlockLocation.getY(), p.breakingBlockLocation.getZ()));
@@ -85,7 +85,7 @@ public class BlockBreaking implements Listener {
         } else if (digType.equals(PacketPlayInBlockDig.EnumPlayerDigType.START_DESTROY_BLOCK)) {
             Location loc = new Location(pl.getWorld(), pa.a().getX(), pa.a().getY(), pa.a().getZ());
 
-            DreamingPlayer player = NullMine.getInstance().getPlayer(pl.getUniqueId());
+            CustomPlayer player = NullMine.getInstance().getPlayer(pl.getUniqueId());
 
             CustomBlock block = BlockManager.getInstance().getBlockClassAt(loc.getChunk(), loc);
 

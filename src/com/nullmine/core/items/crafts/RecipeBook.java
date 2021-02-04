@@ -68,9 +68,17 @@ public class RecipeBook extends ChestUI {
         ItemStack f = new ItemStack(Material.STAINED_GLASS_PANE);
         ItemStack a = new ItemStack(Material.AIR);
 
+        ItemMeta metaa = f.getItemMeta();
+        metaa.setDisplayName(" ");
+        f.setItemMeta(metaa);
+
+        metaa = v.getItemMeta();
+        metaa.setDisplayName(" ");
+        v.setItemMeta(metaa);
+
         ItemStack c = new ItemStack(Material.ARROW);
 
-        ItemMeta metaa = item.getItemMeta();
+        metaa = item.getItemMeta();
         List<String> lo = new ArrayList<>();
         lo.add("§b" + where);
         metaa.setLore(lo);

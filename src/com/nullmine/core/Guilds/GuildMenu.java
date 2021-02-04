@@ -1,18 +1,18 @@
 package com.nullmine.core.Guilds;
 
-import com.nullmine.core.items.LoreInfo;
+import com.nullmine.core.NullMine;
 import com.nullmine.core.utils.ui.ChestUI;
+import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.PacketPlayInUpdateSign;
+import net.minecraft.server.v1_8_R3.PacketPlayOutOpenSignEditor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class GuildMenu extends ChestUI {
     public static GuildMenu getInstance() {
@@ -23,6 +23,8 @@ public class GuildMenu extends ChestUI {
 
     private ItemStack[] noGuild;
 
+    private String checkingString = "qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM_+$#@%&1234567890";
+
     public GuildMenu() {
         super("Recipe book", 5);
         instance = this;
@@ -32,22 +34,36 @@ public class GuildMenu extends ChestUI {
         ItemStack f = new ItemStack(Material.STAINED_GLASS_PANE);
         ItemStack a = new ItemStack(Material.AIR);
 
+        ItemMeta metaa = f.getItemMeta();
+        metaa.setDisplayName(" ");
+        f.setItemMeta(metaa);
+
+        metaa = v.getItemMeta();
+        metaa.setDisplayName(" ");
+        v.setItemMeta(metaa);
+
         ItemStack c = new ItemStack(Material.ANVIL);
 
-        ItemMeta metaa = c.getItemMeta();
-        metaa.setDisplayName("§fCreate a guild");
+        metaa = c.getItemMeta();
+        metaa.setDisplayName("§bCreate a guild");
         c.setItemMeta(metaa);
 
         ItemStack j = new ItemStack(Material.DIAMOND_BLOCK);
 
         metaa = j.getItemMeta();
-        metaa.setDisplayName("§fJoin a guild");
+        metaa.setDisplayName("§bJoin a guild");
         j.setItemMeta(metaa);
+
+        ItemStack d = new ItemStack(Material.SIGN);
+
+        metaa = d.getItemMeta();
+        metaa.setDisplayName("§bTo start you need to join or create a guild!");
+        d.setItemMeta(metaa);
 
 
         noGuild = new ItemStack[] {
                 f,v,v,v,v,v,v,v,f,
-                v,a,a,a,a,a,a,a,v,
+                v,a,a,a,d,a,a,a,v,
                 v,a,c,a,a,a,j,a,v,
                 v,a,a,a,a,a,a,a,v,
                 f,v,v,v,v,v,v,v,f
@@ -59,7 +75,7 @@ public class GuildMenu extends ChestUI {
 
     public void open(Player player) {
         Inventory i = Bukkit.createInventory(null, 45);
-        String g = GuildManager.getInstance().getPlayersGuild(player);
+        String g = NullMine.getInstance().getPlayer(player.getUniqueId()).guild;
         if (g == null) {
             i.setContents(getInventory().getContents());
             player.openInventory(i);
@@ -68,6 +84,31 @@ public class GuildMenu extends ChestUI {
 
     @Override
     public void slotClicked(ItemStack item, int slot, Player player, Inventory inv) {
+        if (item.getItemMeta().getDisplayName().equals("§bCreate a guild")) {
+            EntityPlayer nmspl = ((CraftPlayer)player).getHandle();
 
+            PacketPlayOutOpenSignEditor open = new PacketPlayOutOpenSignEditor(new BlockPosition(0, 48, 0));
+            nmspl.playerConnection.sendPacket(open);
+        }
+    }
+
+    public void getSignEditPacket(PacketPlayInUpdateSign p, Player pl) {
+
+        if (p.a().getX() == 0 && p.a().getY() == 48 && p.a().getX() == 0 && pl.getWorld().getName().equals("spawn")) {
+            if (NullMine.getInstance().getPlayer(pl.getUniqueId()).guild == null) {
+
+                if (p.b()[0].c().length() < 16) {
+                    for (char c : p.b()[0].c().toCharArray()) {
+                        if (!checkingString.contains("" + c)) {
+                            pl.sendMessage("§4The guild name may not contain \"" + c + "\"!");
+                            return;
+                        }
+                    }
+                    GuildManager.getInstance().createGuild(p.b()[0].c(), pl);
+                } else {
+                    pl.sendMessage("§4The guild name is too long!");
+                }
+            }
+        }
     }
 }

@@ -12,9 +12,10 @@ import com.nullmine.core.items.ItemManager;
 import com.nullmine.core.items.crafts.CraftingManager;
 import com.nullmine.core.items.crafts.RecipeBook;
 import com.nullmine.core.items.crafts.RecipeBookCommand;
-import com.nullmine.core.utils.DreamingPlayer;
+import com.nullmine.core.utils.CustomPlayer;
 import com.nullmine.core.utils.PacketHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -23,6 +24,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.io.File;
 import java.util.*;
 
 public class NullMine extends JavaPlugin implements Listener {
@@ -32,7 +34,7 @@ public class NullMine extends JavaPlugin implements Listener {
     }
     public static List<String> playerNames = new ArrayList<>();
 
-    private Map<UUID, DreamingPlayer> playerMap;
+    private Map<UUID, CustomPlayer> playerMap;
 
     @Override
     public void onEnable() {
@@ -78,9 +80,13 @@ public class NullMine extends JavaPlugin implements Listener {
         e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, -1));
 
         playerNames.add(e.getPlayer().getName());
-        DreamingPlayer pl = new DreamingPlayer();
+        CustomPlayer pl = new CustomPlayer();
         pl.player = e.getPlayer();
         playerMap.put(e.getPlayer().getUniqueId(), pl);
+
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(new File("./data/players/" + e.getPlayer().getUniqueId() + ".yml"));
+
+        pl.guild = config.getString("guild");
     }
 
     @EventHandler
@@ -89,11 +95,11 @@ public class NullMine extends JavaPlugin implements Listener {
         playerMap.remove(e.getPlayer().getUniqueId());
     }
 
-    public Map<UUID, DreamingPlayer> getPlayerMap() {
+    public Map<UUID, CustomPlayer> getPlayerMap() {
         return playerMap;
     }
 
-    public DreamingPlayer getPlayer(UUID e) {
+    public CustomPlayer getPlayer(UUID e) {
         return playerMap.get(e);
     }
 }

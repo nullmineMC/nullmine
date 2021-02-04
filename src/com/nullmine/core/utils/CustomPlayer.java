@@ -3,7 +3,7 @@ package com.nullmine.core.utils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class DreamingPlayer {
+public class CustomPlayer {
     // general
     public String guild;
     public Player player;
