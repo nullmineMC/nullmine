@@ -1,6 +1,7 @@
 package com.nullmine.core.Guilds;
 
 import com.nullmine.core.NullMine;
+import com.nullmine.core.items.LoreInfo;
 import com.nullmine.core.utils.ui.ChestUI;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
@@ -16,9 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class GuildMenu extends ChestUI {
     public static GuildMenu getInstance() {
@@ -30,7 +29,7 @@ public class GuildMenu extends ChestUI {
     private ItemStack[] noGuild;
     private ItemStack[] yesGuild;
 
-    private String checkingString = "qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM_+$#@%&1234567890?!π";
+    private String checkingString = "qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM_+$#@%&1234567890?!π¡";
 
     public GuildMenu() {
         super("Recipe book", 5);
@@ -79,6 +78,12 @@ public class GuildMenu extends ChestUI {
         metaa.setDisplayName("§bGuild's info");
         g.setItemMeta(metaa);
 
+        ItemStack i = new ItemStack(Material.PAPER);
+
+        metaa = i.getItemMeta();
+        metaa.setDisplayName("§bInvite player");
+        i.setItemMeta(metaa);
+
 
         noGuild = new ItemStack[] {
                 f,v,v,v,v,v,v,v,f,
@@ -90,7 +95,7 @@ public class GuildMenu extends ChestUI {
         yesGuild = new ItemStack[] {
                 f,v,v,v,v,v,v,v,f,
                 v,a,a,a,g,a,a,a,v,
-                v,a,w,a,a,a,a,a,v,
+                v,a,w,a,a,a,i,a,v,
                 v,a,a,a,a,a,a,a,v,
                 f,v,v,v,v,v,v,v,f
         };
@@ -135,25 +140,51 @@ public class GuildMenu extends ChestUI {
 
             PacketPlayOutOpenSignEditor open = new PacketPlayOutOpenSignEditor(new BlockPosition(0, 48, 0));
             nmspl.playerConnection.sendPacket(open);
+        } else if (item.hasItemMeta() && item.getItemMeta().getDisplayName().equals("§bInvite player")) {
+            EntityPlayer nmspl = ((CraftPlayer)player).getHandle();
+
+            PacketPlayOutOpenSignEditor open = new PacketPlayOutOpenSignEditor(new BlockPosition(0, 47, 0));
+            nmspl.playerConnection.sendPacket(open);
         }
     }
 
     public void getSignEditPacket(PacketPlayInUpdateSign p, Player pl) {
-
-        if (p.a().getX() == 0 && p.a().getY() == 48 && p.a().getX() == 0 && pl.getWorld().getName().equals("spawn")) {
-            if (NullMine.getInstance().getPlayer(pl.getUniqueId()).guild == null) {
-
-                if (p.b()[0].c().length() < 16) {
-                    for (char c : p.b()[0].c().toCharArray()) {
-                        if (!checkingString.contains("" + c)) {
-                            pl.sendMessage("§4The guild name may not contain \"" + c + "\"!");
-                            return;
+        if (p.a().getX() == 0 && pl.getWorld().getName().equals("spawn") && p.a().getX() == 0) {
+            System.out.println(p.a().getY());
+            if (p.a().getY() == 48) {
+                if (NullMine.getInstance().getPlayer(pl.getUniqueId()).guild == null) {
+                    if (p.b()[0].c().length() < 16) {
+                        for (char c : p.b()[0].c().toCharArray()) {
+                            if (!checkingString.contains("" + c)) {
+                                pl.sendMessage("§4The guild name may not contain \"" + c + "\"!");
+                                return;
+                            }
                         }
+                        GuildManager.getInstance().createGuild(p.b()[0].c(), pl);
+                    } else {
+                        pl.sendMessage("§4The guild name is too long!");
                     }
-                    GuildManager.getInstance().createGuild(p.b()[0].c(), pl);
-                } else {
-                    pl.sendMessage("§4The guild name is too long!");
                 }
+            } else if (p.a().getY() == 47) {
+                if (Bukkit.getPlayer(p.b()[0].c()) != null) {
+                    if (NullMine.getInstance().getPlayer(pl.getUniqueId()).guild == null) {
+                        return;
+                    }
+                    ItemStack invite = new ItemStack(Material.PAPER);
+                    ItemMeta m = invite.getItemMeta();
+
+                    Date validTill = Calendar.getInstance().getTime();
+                    validTill.setTime((long) (validTill.getTime() + 4.608e+8));
+
+                    m.setLore(LoreInfo.getLore("invite", new String[] {"invitation", p.b()[0].c(), validTill.toString(), NullMine.getInstance().getPlayer(pl.getUniqueId()).guild}));
+                    m.setDisplayName("§3Guild invite to:§b " + NullMine.getInstance().getPlayer(pl.getUniqueId()).guild);
+                    invite.setItemMeta(m);
+                    pl.getInventory().addItem(invite);
+
+                } else {
+                    pl.sendMessage("It appears that you are trying to invite a player which does not exist");
+                }
+
             }
         }
     }
